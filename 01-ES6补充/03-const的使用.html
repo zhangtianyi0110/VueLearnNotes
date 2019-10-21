@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <title>const的使用</title>
+</head>
+<body>
+<script>
+  //1.定义常量，赋值后不能再赋值，在赋值报错
+  const count = 1
+  // count = 2
+  //2.只声明不赋值，必须赋值
+  // const count;
+  //3.常量的含义是你不能改变其指向的对象user，但是你可以改变user属性
+  const user = {
+      name:"zzz",
+      age:24,
+      height:175
+  }
+  console.log(user)
+  user.name = "ttt"
+  user.age = 22
+  user.height = 188
+  console.log(user)
+</script>
+</body>
+</html>

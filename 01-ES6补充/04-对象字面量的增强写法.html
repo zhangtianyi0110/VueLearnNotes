@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <title>对象字面量的增强写法</title>
+</head>
+<body>
+  <script>
+    //ES6前
+    const name = "zzz"
+    const age = 18
+    // const user = {
+    //     name:name,
+    //     age:age
+    // }
+    //ES6对象属性增强型写法
+    const user = {
+        name,age
+    }
+    console.log(user);
+    //函数ES6前
+    // const obj = {
+    //     run:function(){
+    //         console.log("奔跑");
+    //     }
+    // }
+    //ES6函数增强型写法
+    const obj = {
+      run(){
+        console.log("奔跑");
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>块级作用域</title>
+</head>
+<body>
+
+  <button>按钮0</button>
+  <button>按钮1</button>
+  <button>按钮2</button>
+  <button>按钮3</button>
+  <button>按钮4</button>
+
+  <script>
+    // ES5的var没有块级作用域
+    // ES6的let/const有
+    // ES5之前if和for都没有作用域，所以很多时候必须借助函数function的作用域
+    // 1.变量作用域:变量在什么范围内可用
+    // {
+    //   var name = "zzz"
+    //   console.log(name);
+    // }
+    // console.log(name);
+
+    // 2.没有块级作用域引起的问题:if块级
+    // var func;
+    // if(true){
+    //   var name = "zzz"
+    //   func = function (){
+    //     console.log(name);
+    //   }
+    //   debugger
+    //   func()
+    // }
+    // name = "tttt"
+    // debugger
+    // func()
+    // console.log(name);
+
+    // 3.没有块级作用域引起的问题:for块级
+    // var btns = document.getElementsByTagName("button")
+    // for (var i = 0; i < btns.length; i++) {
+    //   btns[i].addEventListener('click',function (param) {
+    //   console.log("第"+i+"个按钮被点击了");
+    //   })
+    // }
+    // 使用闭包,函数有作用域
+    // for (var i = 0; i < btns.length; i++) {
+    //   (function (i) {
+    //     btns[i].addEventListener('click',function (param) {
+    //       console.log("第"+i+"个按钮被点击了");
+    //     })
+    //   })(i)
+    // }
+    // ES6使用let/const
+    const btns = document.getElementsByTagName("button")
+    for (let i = 0; i < btns.length; i++) {
+      btns[i].addEventListener('click',function (param) {
+        console.log("第"+i+"个按钮被点击了");
+      })
+    }
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>块级作用域(ES5有闭包-没闭包-let对比)</title>
+</head>
+<body>
+
+  <button>按钮1</button>
+  <button>按钮2</button>
+  <button>按钮3</button>
+  <button>按钮4</button>
+  <button>按钮5</button>
+
+  <script>
+
+    // 3.没有块级作用域引起的问题:for块级
+    // var btns = document.getElementsByTagName("button")
+    // for (var i = 0; i < btns.length; i++) {
+    //   btns[i].addEventListener('click',function (param) {
+    //   console.log("第"+i+"个按钮被点击了");
+    //   })
+    // }
+    // 使用闭包,函数有作用域
+    // for (let i = 0; i < btns.length; i++) {
+    //   (function (i) {
+    //     btns[i].addEventListener('click',function (param) {
+    //       console.log("第"+i+"个按钮被点击了");
+    //     })
+    //   })(i)
+    // }
+    // ES6使用let/const
+    const btns = document.getElementsByTagName("button")
+    for (let i = 0; i < btns.length; i++) {
+      btns[i].addEventListener('click',function (param) {
+        console.log("第"+i+"个按钮被点击了");
+      })
+    }
+
+
+  </script>
+</body>
+</html>
