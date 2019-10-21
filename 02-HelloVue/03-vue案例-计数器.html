@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+  <title>vue计数器</title>
+</head>
+<body>
+  <div id="app">
+      <h2>当前计数：{{count}}</h2>
+      <!-- <button v-on:click="count--">-</button>
+      <button v-on:click="count++">+</button> -->
+
+      <button v-on:click="sub()">-</button>
+      <button @click="add()">+</button>
+  </div>
+  <script>
+    const app = new Vue({
+      el:"#app",//用于挂载要管理的元素
+      data:{//定义数据
+        count:0
+      },
+      methods: {
+        add:function(){
+          console.log("add")
+          this.count++
+        },
+        sub:function(){
+          console.log("sub")
+          this.count--
+        }
+      },
+    })
+
+  </script>
+</body>
+</html>
