@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>计算属性的基本使用</title>
+</head>
+<body>
+  <div id="app">
+
+    <!-- Mastache语法 -->
+    <h2>{{firstName+ " " + lastName}}</h2>
+    <!-- 方法 -->
+    <h2>{{getFullName()}}</h2>
+    <!-- 计算属性 -->
+    <h2>{{fullName}}</h2>
+
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+  <script>
+    const app = new Vue({
+      el:"#app",
+      data:{
+        firstName:"skt t1",
+        lastName:"faker"
+      },
+      computed: {
+        fullName:function(){
+          return this.firstName + " " + this.lastName
+        }
+      },
+      methods: {
+        getFullName(){
+          return this.firstName + " " + this.lastName
+        }
+      },
+    })
+  </script>
+</body>
+</html>
