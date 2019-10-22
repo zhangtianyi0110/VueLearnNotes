@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>v-bind的基本使用</title>
+</head>
+<body>
+  <div id="app">
+    <!-- 错误的做法这里不能使用Mustache语法 -->
+    <!-- <img v-bind:src="{{imgURL}}" alt=""> -->
+    <!-- 正确的做法使用v-bind指令 -->
+    <img v-bind:src="imgURL" alt="">
+    <a v-bind:href="aHerf"></a>
+    <!-- 语法糖写法 -->
+    <img :src="imgURL" alt="">
+    <a :href="aHerf"></a>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+  <script>
+    const app = new Vue({
+      el:"#app",
+      data:{
+        message:"你好啊",
+        imgURL:"https://cn.bing.com/th?id=OIP.NaSKiHPRcquisK2EehUI3gHaE8&pid=Api&rs=1",
+        aHerf:"http://www.baidu.com"
+      }
+    })
+  </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>v-bind动态绑定style(对象语法)</title>
+</head>
+<body>
+  <div id="app">
+
+    <!-- <h2 :style="{key(属性名):value(属性值)}">{{message}}</h2> -->
+    <!-- 加单引号，当成字符串解析 -->
+    <h2 :style="{fontSize:'50px'}">{{message}}</h2>
+    <!-- 不加单引号，变量解析 -->
+    <h2 :style="{fontSize:fontSize}">{{message}}</h2>
+    <h2 :style="getStyle()">{{message}}</h2>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+  <script>
+    const app = new Vue({
+      el:"#app",
+      data:{
+        message:"你好啊",
+        fontSize:'100px'
+      },
+      methods: {
+        getStyle(){
+          return {fontSize:this.fontSize}
+        }
+      },
+    })
+  </script>
+</body>
+</html>

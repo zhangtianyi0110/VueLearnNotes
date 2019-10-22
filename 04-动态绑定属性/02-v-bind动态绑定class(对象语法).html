@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>v-bind动态绑定class(对象语法)</title>
+  <style>
+    .active{
+      color:red;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <!-- <h2 class="active">{{message}}</h2>
+    <h2 :class="active">{{message}}</h2> -->
+
+    <!-- 动态绑定class对象用法  -->
+    <!-- <h2 :class="{key1:value1,key2:value2}">{{message}}</h2>
+    <h2 :class="{类名1:true,类名2:boolean}">{{message}}</h2> -->
+    <h2 class="title" :class="{active:isActive}">{{message}}</h2>
+    <h2 class="title" :class="getClasses()">{{message}}</h2>
+    <button @click="change">点击变色</button>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+  <script>
+    const app = new Vue({
+      el:"#app",
+      data:{
+        message:"你好啊",
+        active:"active",
+        isActive:true
+      },
+      methods: {
+        change(){
+          this.isActive = !this.isActive
+        },
+        getClasses(){
+          return {active:this.isActive}
+        }
+      },
+    })
+  </script>
+</body>
+</html>
