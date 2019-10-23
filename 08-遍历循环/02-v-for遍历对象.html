@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>v-for遍历对象</title>
+</head>
+<body>
+  <div id="app">
+    <!-- 1.遍历过程没有使用key-->
+    <!-- 格式为：key-value -->
+    <ul>
+      <li v-for="(item,key) in user" >{{key+"-"+item}}</li>
+    </ul>
+    <!-- 2.遍历过程没有使用索引和key-->
+    <!-- 格式为：key-value-index -->
+    <ul>
+      <li v-for="(item,key,index) in user" >{{key+"-"+item+"-"+index}}</li>
+    </ul>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+  <script>
+    const app = new Vue({
+      el:"#app",
+      data:{
+        user:{
+          name:"zzz",
+          height:188,
+          age:24
+        }
+      }
+    })
+  </script>
+</body>
+</html>

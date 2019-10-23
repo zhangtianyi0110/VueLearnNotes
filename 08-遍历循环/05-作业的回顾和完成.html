@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>综合练习</title>
+  <style>
+    .active {
+      background-color: red;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <!-- 数组的响应式方法 -->
+    <ul>
+      <li v-for="(item,index) in movies"  @click="liClick(index)" :class="{active:index===curIndex}">{{index+"---"+item}}</li>
+    </ul>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: "#app",
+      data: {
+        movies: ['复仇者联盟', '蝙蝠侠', '海贼王', '星际穿越'],
+        curIndex:0
+      },
+      methods: {
+        liClick(index){
+          this.curIndex = index
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>
