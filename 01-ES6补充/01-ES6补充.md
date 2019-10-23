@@ -90,7 +90,7 @@ console.log(name);
 
 ​	结果如图所示，借用函数的作用域解决块级作用域的问题，因为有块级作用域，每次添加的i都是当前i。
 
-![](./images/1.1.1.2.2-1.png)
+![](./images/1.1.2-1.png)
 
 ​	在ES6中使用let/const解决块级作用域问题，let和const有块级作用域，const定义常量，在for块级中使用let解决块级作用域问题。
 
@@ -144,6 +144,14 @@ console.log(name);
         console.log(user)
     </script>
 ```
+
+**const内存地址详解**
+
+![](./images/1.2-1.png)
+
+​	对象count一开始只想0x10的地址，直接将count（给count重新赋值，指向一个新的对象）指向地址改为0x20会报错，const是常量，无法更改对象地址。
+
+​	对象user一开始指向0x10地址，user有`Name`、`Age`、`Height`三个属性，此时修改属性`Name='ttt'`，user对象的地址未改变，不会报错。
 
 ## 1.3	ES6的增强写法
 
