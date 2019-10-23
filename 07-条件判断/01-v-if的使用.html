@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <h2 v-if="isFlag">isFlag为true显示这个</h2>
+    <h2 v-show="isShow">isShow为true是显示这个</h2>
+    <div v-if="age<18">小于18岁未成年</div>
+    <div v-else-if="age<60">大于18岁小于60岁正值壮年</div>
+    <div v-else="">大于60岁,暮年</div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+  <script>
+    const app = new Vue({
+      el:"#app",
+      data:{
+        isFlag:true,
+        isShow:false,
+        age:66
+      }
+    })
+  </script>
+</body>
+</html>

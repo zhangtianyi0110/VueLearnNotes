@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>v-if的demo</title>
+</head>
+<body>
+  <div id="app">
+    <!-- 添加key主要是为了让vue不复用dom，如果不添加vue底层会复用dom -->
+    <span v-if="isUser">
+      <label for="username">用户账号</label>
+      <input type="text" id="username" placeholder="请输入用户名" >
+    </span>
+    <span v-else="isUser">
+        <label for="email">用户邮箱</label>
+        <input type="text" id="email" placeholder="请输入用户邮箱" >
+    </span>
+    <button @click="isUser=!isUser">切换类型</button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+  <script>
+    const app = new Vue({
+      el:"#app",
+      data:{
+        isUser:true
+      }
+    })
+  </script>
+</body>
+</html>
