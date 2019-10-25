@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>图书购物车小案例</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div id="app">
+    <table>
+      <thead>
+        <th>&nbsp;</th>
+        <th>书籍名称</th>
+        <th>出版日期</th>
+        <th>价格</th>
+        <th>购买数量</th>
+        <th>操作</th>
+      </thead>
+      <tbody>
+        <tr v-for="(book, index) in books" :key="index">
+          <td>{{index}}</td>
+          <td>{{book.name}}</td>
+          <td>{{book.beginDate}}</td>
+          <td>{{book.price | showPrice}}</td>
+          <td>
+            <button @click="decrement(index)" :disabled="book.count<=1" >-</button>
+            {{book.count}}
+            <button @click="increment(index)">+</button>
+          </td>
+          <td><button @click="remove">移除</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <h3>总价：{{totalPrice | showPrice}}</h3>
+
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+  <script src="main.js"></script>
+
+</body>
+
+</html>
