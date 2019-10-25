@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>箭头函数参数和返回值</title>
+</head>
+<body>
+  <script>
+  //箭头函数
+  //1.参数问题
+  //1.1放入两个参数
+  const sum = (num1,num2) => {
+    return num1 + num2
+  }
+  //1.2放入一个参数,()可以省略
+  const power = num => {
+    return num * num
+  }
+
+  //2.函数中
+  //2.1函数代码块中有多行代码
+  const test = () =>{
+    console.log("hello zzz")
+    console.log("hello vue")
+
+  }
+  //2.2函数代码块中只有一行代码(可以省略return)
+  // const mul = (num1,num2) => {
+  //   return num1 * num2
+  // }
+  const mul = (num1,num2) => num1* num2
+
+  // const log = () => {
+  //   console.log("log")
+  // }
+  const log = () => console.log("log")
+
+  </script>
+</body>
+</html>

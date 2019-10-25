@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>箭头函数this使用</title>
+</head>
+
+<body>
+  <script>
+    //什么时候使用箭头函数
+    // setTimeout(function () {
+    //   console.log(this)
+    // } , 1000);
+    // setTimeout(() => {
+    //   console.log(this)//这里this找的是window的this
+    // }, 1000);
+
+    //结论：箭头函数没有this，这里的this引用的是最近作用域(aaa函数里的this)的this
+    // const obj = {
+    //   aaa(){
+    //     setTimeout(function () {
+    //       console.log(this)//window
+    //      });
+    //      setTimeout(() => {
+    //       console.log(this)//obj
+    //     });
+    //   }
+    // }
+    // obj.aaa()
+
+    const obj = {
+      aaa() {
+        setTimeout(function () {
+          setTimeout(function () {
+            console.log(this) //window
+          })
+          setTimeout(() => {
+            console.log(this) //window
+          })
+        })
+        setTimeout(() => {
+          setTimeout(function () {
+            console.log(this) //window
+          })
+          setTimeout(() => {
+            console.log(this) //obj
+          })
+        })
+      }
+    }
+    obj.aaa()
+  </script>
+</body>
+
+</html>
