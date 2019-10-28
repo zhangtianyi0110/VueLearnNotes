@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>v-model修饰符</title>
+</head>
+<body>
+  <div id="app">
+    <h2>v-model修饰符</h2>
+    <h3>lazy,默认情况是实时更新数据，加上lazy，从输入框失去焦点，按下enter都会更新数据</h3>
+    <input type="text" v-model.lazy="message">
+    <div>{{message}}</div>
+    <h3>修饰符number,默认是string类型，使用number赋值为number类型</h3>
+    <input type="number" v-model.number="age">
+    <div>{{age}}--{{typeof age}}</div>
+    <h3>修饰符trim:去空格</h3>
+    <input type="text" v-model.trim="name">
+    <div>{{name}}</div>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+  <script>
+    const app = new Vue({
+      el:"#app",
+      data:{
+        message:"zzz",
+        age:18,
+        name:"ttt"
+      },
+
+    })
+  </script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>v-model结合checkbox类型</title>
+</head>
+<body>
+  <div id="app">
+    <!-- checkbox单选框 -->
+    <h2>单选框</h2>
+    <label for="agree">
+      <input type="checkbox" id="agree" v-model="isAgree">同意协议
+    </label>
+
+    <div>你选择的结果是：{{isAgree}}</div>
+
+    <button :disabled="!isAgree">下一步</button>
+    <!-- checkbox多选框 -->
+    <h2>多选框</h2>
+
+      <label :for="item" v-for="(item, index) in oriHobbies" :key="index">
+        <input type="checkbox" name="hobby" :value="item" :id="item" v-model="hobbies">{{item}}
+      </label>
+      <!-- <input type="checkbox" name="hobby" value="篮球" v-model="hobbies">篮球
+      <input type="checkbox" name="hobby" value="足球" v-model="hobbies">足球
+      <input type="checkbox" name="hobby" value="羽毛球"  v-model="hobbies">羽毛球
+      <input type="checkbox" name="hobby" value="乒乓球"  v-model="hobbies">乒乓球 -->
+
+    <div>你的爱好是：{{hobbies}}</div>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+  <script>
+    const app = new Vue({
+      el:"#app",
+      data:{
+        message:"zzz",
+        isAgree:false,
+        hobbies:[],
+        oriHobbies:["篮球","足球","羽毛球","乒乓球"]
+      },
+
+    })
+  </script>
+</body>
+</html>

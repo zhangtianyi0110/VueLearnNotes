@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>v-model的基本使用</title>
+</head>
+<body>
+  <div id="app">
+    <!-- 输入框内容修改，message也修改，修改message，input内容也修改，双向绑定 -->
+    <input type="text" v-model="message">{{message}}
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+  <script>
+    const app = new Vue({
+      el:"#app",
+      data:{
+        message:"zzz"
+      }
+    })
+  </script>
+</body>
+</html>
