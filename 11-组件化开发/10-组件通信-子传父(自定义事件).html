@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>组件通信-子传父(自定义事件)</title>
+</head>
+
+<body>
+  <!-- 父组件 -->
+  <div id="app">
+    <!-- 不写参数默认传递btnClick的item -->
+    <cpn @itemclick="cpnClcik"></cpn>
+
+  </div>
+
+  <!-- 子组件 -->
+  <template id="cpn">
+
+    <div>
+      <button v-for="(item, index) in categoties" :key="index" @click="btnClick(item)">{{item.name}}</button>
+    </div>
+  </template>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+
+  <script>
+    // 父传子：props
+    const cpn = {
+      template: "#cpn",
+      data() {
+        return {
+          categoties: [{
+              id: 'aaa',
+              name: '热门推荐'
+            },
+            {
+              id: 'bbb',
+              name: '手机数码'
+            },
+            {
+              id: 'ccc',
+              name: '家用家电'
+            },
+            {
+              id: 'ddd',
+              name: '电脑办公'
+            },
+          ]
+        }
+      },
+      methods: {
+        btnClick(item) {
+          this.$emit('itemclick', item)
+        }
+      },
+    };
+    const app = new Vue({
+      el: "#app",
+      data() {
+        return {
+
+        }
+      },
+      methods: {
+        cpnClcik(item) {
+          console.log('cpnClick'+item.name);
+        }
+      },
+      components: {
+        cpn
+      },
+    })
+  </script>
+</body>
+
+</html>

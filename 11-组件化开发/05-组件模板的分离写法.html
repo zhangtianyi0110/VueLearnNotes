@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>组件模板的分离写法</title>
+</head>
+
+<body>
+  <div id="app">
+    <cpn1></cpn1>
+    <cpn2></cpn2>
+  </div>
+  <!-- 1.script标签注意类型是text/x-template -->
+  <script type="text/x-template" id="cpn1">
+    <div>
+        <h2>组件模板的分离写法</h2>
+        <p>script标签注意类型是text/x-template</p>
+      </div>
+  </script>
+  <!-- 2.template标签 -->
+  <template id="cpn2">
+    <div>
+      <h2>组件模板的分离写法</h2>
+      <p>template标签</p>
+    </div>
+  </template>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+  <script>
+
+    const app = new Vue({
+      el: "#app",
+      components: { //局部组件创建
+        cpn1:{
+          template:'#cpn1'
+        },
+        cpn2: {
+          template: '#cpn2'
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>注册组件语法糖写法</title>
+</head>
+<body>
+  <div id="app">
+    <cpn1></cpn1>
+    <cpn2></cpn2>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+  <script>
+    // 1.注册全局组件语法糖
+    Vue.component('cpn1', {
+      template:`
+        <div>
+          <h2>全局组件语法糖</h2>
+          <p>全局组件语法糖</p>
+        </div>`
+    })
+
+    const app = new Vue({
+      el:"#app",
+      components:{//局部组件创建
+        cpn2:{
+          template:`
+        <div>
+          <h2>局部组件语法糖</h2>
+          <p>局部组件语法糖</p>
+        </div>`
+        }
+      }
+    })
+  </script>
+</body>
+</html>

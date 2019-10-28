@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>组件数据存放问题</title>
+</head>
+
+<body>
+  <div id="app">
+    <cpn1></cpn1>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+  <script>
+
+    const app = new Vue({
+      el: "#app",
+      components: { //局部组件创建
+        cpn1:{
+          template:'<div>{{msg}}</div>',
+          data(){
+            return {
+              msg:"组件的数据存放必须要是一个函数"
+            }
+          }
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>组件通信-父传子(props的驼峰标识)</title>
+</head>
+
+<body>
+  <div id="app">
+    <!-- v-bind不支持驼峰 :cUser改成 :c-User-->
+    <!-- <cpn :cUser="user"></cpn> -->
+    <cpn :c-User="user"></cpn>
+    <cpn :cuser="user" ></cpn>
+
+  </div>
+
+  <template id="cpn">
+
+    <div>
+      <!-- 使用驼峰 -->
+      <h2>{{cUser}}</h2>
+      <!-- 不使用 -->
+      <h2>{{cuser}}</h2>
+
+
+    </div>
+  </template>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+
+  <script>
+    // 父传子：props
+    const cpn = {
+      template: "#cpn",
+      props: { //对象写法
+        //驼峰
+        cUser:Object,
+        //未使用驼峰
+        cuser:Object
+      },
+      data() {
+        return {
+
+        }
+      },
+      methods: {
+
+      },
+    };
+    const app = new Vue({
+      el: "#app",
+      data: {
+        user:{
+          name:'zzz',
+          age:18,
+          height:175
+        }
+      },
+      components: {
+        cpn
+      }
+    })
+  </script>
+</body>
+
+</html>

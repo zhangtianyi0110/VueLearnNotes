@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>父组件向子组件传递数据</title>
+</head>
+
+<body>
+  <div id="app">
+
+    <cpn :cMovies="movies" :cMessage="message"></cpn>
+
+  </div>
+
+  <template id="cpn">
+
+    <div>
+      <ul>
+        <li v-for="(item, index) in cmovies" :key="index">{{item}}</li>
+      </ul>
+      <h2>{{cmessage}}</h2>
+
+    </div>
+  </template>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+
+  <script>
+    function Person(firstName,lastName) {
+      this.firstName = firstName
+      this.lastName = lastName
+    }
+    // 父传子：props
+    const cpn = {
+      template: "#cpn",
+      // props: ['cmovies', 'cmessage'],//数组写法
+      props: { //对象写法
+        // 1.类型限制(多个类使用数组)
+        // cmovies:Array,
+        // cmessage:String,
+        // cmessage:['String','Number'],
+        // 2.提供一些默认值，以及必传值
+        cmessage: {
+          type: String,
+          default: 'zzzzz',
+          required: true //在使用组件必传值
+        },
+        //类型是Object/Array，默认值必须是一个函数
+        cmovies: {
+          type: Array,
+          default () {
+            return [1, 2, 3, 4]
+          }
+        },
+        // 3.自定义验证函数
+        // vaildator: function (value) {
+        //   //这个传递的值必须匹配下列字符串中的一个
+        //   return ['zzzzz', 'ttttt', 'yyy'].indexOf(value) !== -1
+        // }
+        // 4.自定义类型
+        // cmessage:Person,
+
+      },
+      data() {
+        return {
+
+        }
+      },
+      methods: {
+
+      },
+    };
+    const app = new Vue({
+      el: "#app",
+      data: {
+        message: "你好",
+        movies: ["复仇者联盟", "钢铁侠", "星际穿越", "哪吒传奇"]
+      },
+      components: {
+        cpn
+      }
+    })
+  </script>
+</body>
+
+</html>

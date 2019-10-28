@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>组件通信-父子通信案例</title>
+</head>
+
+<body>
+  <!-- 父组件 -->
+  <div id="app">
+
+    <cpn :number1='num1' :number2='num2' @num1change="num1Change" @num2change="num2Change"></cpn>
+
+    <h2>父组件{{num1}}</h2>
+    <input type="text" v-model="num1" >
+    <h2>父组件{{num2}}</h2>
+    <input type="text" v-model="num2">
+
+  </div>
+
+  <!-- 子组件 -->
+  <template id="cpn">
+
+    <div>
+      <h2>子组件number1{{number1}}</h2>
+      <h2>子组件dunber1{{dnumber1}}</h2>
+      <input type="text" :value="dnumber1" @input="num1input">
+      <h2>子组件number2{{number2}}</h2>
+      <input type="text" :value="dnumber2" @input="num2input">
+    </div>
+  </template>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+
+  <script>
+    // 父传子：props
+    const cpn = {
+      template: "#cpn",
+      data() {
+        return {
+          dnumber1:this.number1,
+          dnumber2:this.number2
+        }
+      },
+      props:{
+        number1:[Number,String],
+        number2:[Number,String],
+      },
+      methods: {
+        num1input(event){
+          this.dnumber1 = event.target.value
+          this.$emit('num1change',this.dnumber1)
+        },
+        num2input(event){
+          this.dnumber2 = event.target.value
+          this.$emit('num2change',this.dnumber2)
+        }
+      },
+    };
+    const app = new Vue({
+      el: "#app",
+      data() {
+        return {
+          num1:1,
+          num2:2,
+        }
+      },
+      methods: {
+        num1Change(value){
+          this.num1=value
+        },
+        num2Change(value){
+          this.num1=value
+        }
+      },
+      components: {
+        cpn
+      },
+    })
+  </script>
+</body>
+
+</html>

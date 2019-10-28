@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>子访问父-parent</title>
+</head>
+
+<body>
+  <!-- 父组件 -->
+  <div id="app">
+
+    <cpn></cpn>
+    <cpn></cpn>
+    <cpn ref="aaa"></cpn>
+
+
+  </div>
+
+  <!-- 子组件 -->
+  <template id="cpn">
+
+    <div>
+      子组件消息：{{message}}
+      <button @click="btnClick" >子组件按钮</button>
+    </div>
+  </template>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+
+  <script>
+    // 父传子：props
+    const cpn = {
+      template: "#cpn",
+      data() {
+        return {
+          message:"我是子组件的name"
+        }
+      },
+      methods: {
+        btnClick(){
+          console.log("子组件按钮被点击")
+          // 1.访问父组件$parent
+          this.message = this.$parent.message
+          // 2.访问根组件$root
+          console.log(this.$root)
+          console.log(this.$root.message)
+        }
+      },
+    };
+    const app = new Vue({
+      el: "#app",
+      data() {
+        return {
+          message:"我是父组件消息"
+        }
+      },
+      methods: {
+
+      },
+      components: {
+        cpn
+      },
+    })
+  </script>
+</body>
+
+</html>

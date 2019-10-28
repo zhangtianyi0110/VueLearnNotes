@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>组件的data为什么要是函数</title>
+</head>
+
+<body>
+  <div id="app">
+    <h2>data不使用函数</h2>
+    <cpn1></cpn1>
+    <cpn1></cpn1>
+    <hr>
+    <h2>data使用函数</h2>
+    <cpn2></cpn2>
+    <cpn2></cpn2>
+    <hr>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+  <template id="cpn1">
+    <div>
+      <button @click="count--">-</button>
+      当前计数：{{count}}
+      <button @click="count++">+</button>
+    </div>
+  </template>
+  <template id="cpn2">
+    <div>
+      <button @click="count--">-</button>
+      当前计数：{{count}}
+      <button @click="count++">+</button>
+    </div>
+  </template>
+  <script>
+    const obj = {
+      count:0
+    };
+    const app = new Vue({
+      el: "#app",
+      components: { //局部组件创建
+        cpn1: {
+          template: '#cpn1',
+          data() {
+            return obj;
+          }
+        },
+        cpn2: {
+          template: '#cpn2',
+          data() {
+            return {
+              count: 0
+            }
+          }
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>
