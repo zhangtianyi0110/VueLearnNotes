@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>slot-具名插槽的使用</title>
+</head>
+
+<body>
+
+
+  <!-- 父组件 -->
+  <div id="app">
+
+    <cpn>
+      <span>没具名</span>
+      <span slot="left">这是左边具名插槽</span>
+      <!-- 新语法 -->
+      <template v-slot:center>这是中间具名插槽</template>
+      <!-- 新语法缩写 -->
+      <template #right>这是右边具名插槽</template>
+
+
+    </cpn>
+
+
+  </div>
+
+  <!-- 插槽的基本使用使用<slot></slot> -->
+  <!-- 子组件 -->
+  <template id="cpn">
+
+    <div>
+
+      <slot name="left">左边</slot>
+      <slot name="center">中间</slot>
+      <slot name="right">右边</slot>
+      <slot>没有具名的插槽</slot>
+    </div>
+  </template>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+
+  <script>
+    const cpn = {
+      template: "#cpn",
+      data() {
+        return {
+          message: "我是子组件"
+        }
+      },
+    }
+    const app = new Vue({
+      el: "#app",
+      data() {
+        return {
+          message: "我是父组件消息"
+        }
+      },
+      components: {
+        cpn
+      },
+    })
+  </script>
+</body>
+
+</html>

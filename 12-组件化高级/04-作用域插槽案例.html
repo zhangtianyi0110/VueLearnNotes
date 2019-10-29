@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>作用域插槽案例</title>
+</head>
+
+<body>
+
+
+  <!-- 父组件 -->
+  <div id="app">
+    <cpn></cpn>
+    <!-- 目的是获取子组件数据 -->
+    <cpn>
+      <!-- 2.5以下必须使用template -->
+      <template slot-scope="slot">
+        <!-- <span v-for="(item, index) in slot.data" :key="index">{{item}}-</span> -->
+        <span>{{slot.data.join(' - ')}}</span>
+      </template>
+    </cpn>
+    <cpn>
+        <!-- 2.5以下必须使用template -->
+        <template v-slot="slot">
+          <!-- <span v-for="(item, index) in slot.data" :key="index">{{item}}*</span> -->
+          <span>{{slot.data.join(' * ')}}</span>
+        </template>
+    </cpn>
+  </div>
+
+<!-- 插槽的基本使用使用<slot></slot> -->
+  <!-- 子组件 -->
+  <template id="cpn">
+
+    <div>
+      <slot :data="pLanguage">
+          <ul>
+              <li v-for="(item, index) in pLanguage" :key="index">{{item}}</li>
+            </ul>
+      </slot>
+
+    </div>
+  </template>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+
+  <script>
+    const cpn = {
+      template: "#cpn",
+      data() {
+        return {
+          isShwo:false,
+          pLanguage:['JavaScript','Java','C++','C']
+        }
+      },
+    }
+    const app = new Vue({
+      el: "#app",
+      data() {
+        return {
+          isShow:true
+        }
+      },
+      components: {
+        cpn
+      },
+    })
+  </script>
+</body>
+
+</html>

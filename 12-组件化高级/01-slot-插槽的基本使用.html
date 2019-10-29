@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>slot-插槽的基本使用</title>
+</head>
+
+<body>
+
+
+  <!-- 父组件 -->
+  <div id="app">
+
+    <cpn></cpn>
+    <cpn>
+      <span style="color:red;">这是插槽内容222</span>
+    </cpn>
+    <cpn>
+      <i style="color:red;">这是插槽内容333</i>
+    </cpn>
+    <cpn></cpn>
+
+  </div>
+
+  <!-- 插槽的基本使用使用<slot></slot> -->
+  <!-- 子组件 -->
+  <template id="cpn">
+
+    <div>
+      <div>
+        {{message}}
+      </div>
+      <!-- 插槽默认值 -->
+      <slot><button>button</button></slot>
+    </div>
+  </template>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+
+  <script>
+    const cpn = {
+      template: "#cpn",
+      data() {
+        return {
+          message: "我是子组件"
+        }
+      },
+    }
+    const app = new Vue({
+      el: "#app",
+      data() {
+        return {
+          message: "我是父组件消息"
+        }
+      },
+      components: {
+        cpn
+      },
+    })
+  </script>
+</body>
+
+</html>
