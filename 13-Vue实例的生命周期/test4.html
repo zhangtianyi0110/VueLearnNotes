@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue实例无template的生命周期</title>
+    
+    <!-- 引入vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+</head>
+<body>
+    <h1>测试有template的生命周期</h1>
+    <div id="app">
+        {{msg}}
+    </div>
+    <script>
+        var app = new Vue({
+            el:"#app",
+            data:{  
+                msg:"无template"
+            },
+            beforeCreate:function(){
+                console.log("调用了beforeCreate钩子函数");
+            },
+            created:function () {
+                console.log("调用了created钩子函数");
+            },
+            beforeMount: function () {
+                console.log('调用了beforeMount钩子函数')
+            },
+            mounted: function () {
+                console.log('调用了mounted钩子函数')
+            },
+            beforeUpdate: function () {
+                console.log("调用了beforeUpdate钩子函数")
+            },
+            updated: function () {
+                console.log("调用了updated钩子函数");
+            },
+            beforeDestroy: function () {
+                console.log("调用了beforeDestroy钩子函数")
+            },
+            destroyed: function () {
+                console.log("调用了destroyed钩子函数");
+            },
+        });
+    </script>
+</body>
+</html>

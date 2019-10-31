@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue实例无数据绑定的修改数据</title>
+    
+    <!-- 引入vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+</head>
+<body>
+    <h1>测试无数据绑定修改数据，钩子函数调用情况</h1>
+    <div id="app">
+    </div>
+    <script>
+        var app = new Vue({
+            el:"#app",
+            template:"<p></p>",
+            data:{  
+                msg:"1"
+            },
+            beforeUpdate: function () {
+                console.log("调用了beforeUpdate钩子函数")
+            },
+            updated: function () {
+                console.log("调用了updated钩子函数");
+            },
+        });
+        app.msg = 2
+    </script>
+</body>
+</html>
