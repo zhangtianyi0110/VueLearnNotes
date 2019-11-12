@@ -258,3 +258,181 @@ vue init webpack 02-runtime-compiler
 vue init webpack 03-runtime-only
 ```
 
+两个项目的main.js区别
+
+> runtime-compiler
+
+```javascript
+import Vue from 'vue'
+import App from './App'
+
+Vue.config.productionTip = false
+
+/* eslint-disable no-new */
+new Vue({
+  el: '#app',
+  components: { App },
+  template: '<App/>'
+})
+```
+
+> runtime-only
+
+```javascript
+import Vue from 'vue'
+import App from './App'
+
+Vue.config.productionTip = false
+
+/* eslint-disable no-new */
+new Vue({
+  el: '#app',
+  render: h => h(App)
+})
+```
+
+`render: h => h(App)`
+
+```javascript
+render:function(h){
+  return h(App)
+}
+```
+
+**compiler编译解析template过程**
+
+![](./images/16-7.png)
+
+`vm.options.template`解析成`ast(abstract syntax tree)`抽象语法树，抽象语法树编译成`vm.options.render(functions)`render函数。render函数最终将template解析的ast渲染成虚拟DOM（`virtual dom`），最终虚拟dom映射到ui上。
+
+**runtime-compiler**
+template会被解析 => ast(抽象语法树) => 然后编译成render函数 => 渲染成虚拟DOM（vdom）=> 真实dom(UI)
+**runtime-only**
+render => vdom => UI
+
+1.性能更高，2.需要代码量更少
+
+> render函数
+
+```javascript
+render:function(createElement){
+  //1.createElement('标签',{标签属性},[''])
+  return createElement('h2',
+    {class:'box'},
+    ['Hello World',createElement('button',['按钮'])])
+  //2.传入组件对象
+  //return createElement(cpn)
+}
+```
+
+h就是一个传入的createElement函数，.vue文件的template是由vue-template-compiler解析。
+
+将02-runtime-compiler的main.js修改
+
+```javascript
+new Vue({
+  el: '#app',
+  // components: { App },
+  // template: '<App/>'
+  //1.createElement('标签',{标签属性},[''])
+  render(createElement){
+    return createElement('h2',
+    {class:'box'},
+    ['hello vue', createElement('button',['按钮'])])
+  }
+})
+```
+
+并把config里面的inedx.js的`useEslint: true`改成false，即关掉eslint规范，打包项目`npm run dev`，打开浏览器。
+
+![](./images/16-8.png)
+
+在修改main.js
+
+```javascript
+new Vue({
+  el: '#app',
+  // components: { App },
+  // template: '<App/>'
+  //1.createElement('标签',{标签属性},[''])
+  render(createElement){
+    // return createElement('h2',
+    // {class:'box'},
+    // ['hello vue', createElement('button',['按钮'])])
+    //2.传入组件
+    return createElement(App)
+  }
+```
+
+再次打包，发现App组件被渲染了。
+
+![](./images/16-9.png)
+
+## 16.4	vue-cli3
+
+### 16.4.1	vue-cli3起步
+
+**vue-cli3与2版本区别**
+
+- vue-cli3基于webpack4打造，vue-cli2是基于webpack3
+- vue-cli3的设计原则是"0配置"，移除了配置文件，build和config等
+- vue-cli3提供`vue ui`的命令，提供了可视化配置
+- 移除了static文件夹，新增了public文件夹，并将index.html移入了public文件夹
+
+**创建vue-cli3项目**
+
+```bash
+vue create 04-vuecli3test
+```
+
+**目录结构：**
+
+![](./images/16-10.png)
+
+- public 类似 static文件夹，里面的资源会原封不动的打包
+- src源码文件夹
+
+
+
+使用`npm run serve`运行服务器，打开浏览器输入http://localhost:8080/
+
+打开src下的main.js
+
+```javascript
+import Vue from 'vue'
+import App from './App.vue'
+
+Vue.config.productionTip = false
+
+new Vue({
+  render: h => h(App),
+}).$mount('#app')
+```
+
+`Vue.config.productionTip = false`构建信息是否显示
+
+如果vue实例有el选项，vue内部会自动给你执行`$mount('#app')`，如果没有需要自己执行。
+
+### 16.4.2	vue-cli3的配置
+
+在创建vue-cli3项目的时候可以使用`vue ui`命令进入图形化界面创建项目，可以以可视化的方式创建项目，并配置项。
+
+vue-cli3配置被隐藏起来了，可以在`node_modules`文件夹中找到`@vue`模块，打开其中的`cli-service`文件夹下的`webpack.config.js`文件。
+
+<img src="./images/16-11.png" />
+
+再次打开当前目录下的`lib`文件夹，发现配置文件`service.js`，并导入了许多模块，来自与lib下面的config、util等模块
+
+![](./images/16-11.png)
+
+**如何要自定义配置文件**
+
+在项目根目录下新建一个`vue.config.js`配置文件，必须为`vue.config.js`，vue-cli3会自动扫描此文件，在此文件中修改配置文件。
+
+```javascript
+//在module.exports中修改配置
+module.exports = {
+  
+}
+```
+
