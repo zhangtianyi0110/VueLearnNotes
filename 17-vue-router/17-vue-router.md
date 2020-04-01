@@ -394,3 +394,295 @@ export default {
 
 修改app.vue，将`<router-link>`换成`button`等任何组件，添加上点击事件，并写好点击事件响应方法，此时使用`this.$router.push('/home')`，push方法 等价于pushState方法，replace 方法等价于replaceState方法。
 
+## 17.5	渐入vue-router
+
+### 17.5.1	vue-router的动态路由
+
+一个页面的path路径可能是不确定的，例如可能有`/user/aaaa`或者`/user/bbbb`，除了`/user`之外，后面还跟上了用户ID`/user/123`等。这种path和component的匹配关系，叫动态路由。
+
+> 新建一个User组件
+
+```vue
+<template>
+  <div class="page-contianer">
+    <h2>这是用户界面</h2>
+    <p>这里是用户页面的内容。</p>
+    <p>用户ID是: {{ userId }}</p>
+  </div>
+</template>
+<script type="text/ecmascript-6">
+export default {
+  name: 'User',
+  computed:{
+    userId() {
+      return this.$route.params.userId
+    }
+  }
+}
+</script>
+<style scoped>
+</style>
+
+```
+
+该组件定义一个计算属性，通过`this.$route.params.userId`获取处于激活状态的路由参数`userId`。
+
+> 配置路由参数index.js
+
+```js
+  {
+    path: '/user/:userId',
+    name: 'User',
+    component: () => import('@/components/User') //懒加载组件
+  }
+```
+
+使用`:userId`指定动态路由参数`userId`。
+
+> app.vue中添加user页面的`<router-link>`，并添加userId变量
+
+```vue
+    <router-link :to="/user/ + userId">用户</router-link>
+```
+
+```js
+  data (){
+    return {
+      userId: 'zty'
+    }
+```
+
+启动项目，点击用户。
+
+![](./images/17-9.png)
+
+> 总结
+
+`$route`是代表处于激活状态的路由，这里指的也就是
+
+```js
+  {
+    path: '/user/:userId',
+    name: 'User',
+    component: () => import('@/components/User') 
+  }
+```
+
+通过`$route.params`获取[`$route`]([https://router.vuejs.org/zh/api/#%E8%B7%AF%E7%94%B1%E5%AF%B9%E8%B1%A1%E5%B1%9E%E6%80%A7](https://router.vuejs.org/zh/api/#路由对象属性))所有的参数，`$route.params.userId`，获取所有参数中的名字叫`userId`的属性，此时可以在User组件中动态获取路由参数，也就可以在app.vue中动态设置路由中的`userId`，其他属性请参考[`$route`]([https://router.vuejs.org/zh/api/#%E8%B7%AF%E7%94%B1%E5%AF%B9%E8%B1%A1%E5%B1%9E%E6%80%A7](https://router.vuejs.org/zh/api/#路由对象属性))。
+
+### 17.5.2	vue-router的打包文件解析
+
+> 问题：打包时候js太大，页面响应缓慢
+
+如果组件模块化了，当路由被访问的时候才开始加载被选中的组件，这样就是懒加载，前面也介绍过。
+
+```js
+component: () => import('@/components/User') 
+```
+
+使用`npm run build`命令将之前创建的项目打包，打开dist文件夹，器目录结构如下：
+
+![](./images/17-10.png)
+
+- app.xxx.js是我们自己编写的业务代码
+- vendor.xxx.js是第三方框架，例如vue/vue-router/axios等
+- mainfest.xxx.js是为了打包的代码做底层支持的，一般是webpack帮我们做一些事情
+- 除了这三个还多了2个js，这2个js文件（0.5bxxx.js和1.e5xxx.js）分别是About和User组件，因为这2个组件是懒加载的所以被分开打包了。
+
+![](./images/17-11.png)
+
+此时因为是懒加载，需要用到这个组件的时候才会加载，所以不会一次性请求所有js。
+
+### 17.5.3	认识嵌套路由
+
+平常在一个home页面中，我们可能需要`/home/news`和`/home/message`访问一些内容，一个路由映射一个组件就像后端一个api对应一个controller的一个requestMapping一样，访问两个路由也会分别渲染这两个组件。
+
+![](./images/17-12.png)
+
+要实现嵌套路由：
+
+1. 创建对应的子组件，并且在路由映射(`router/index.js`)中配置对应的子路由。
+
+2. 在组件内部使用`<router-view>`标签来占位。
+
+   > 新建2个组件HomeNews和HomeMessage
+
+```vue
+<template>
+  <div class="page-contianer">
+    <ul>
+      <li v-for="(item, index) in list">{{ item + index + 1 }}</li>
+    </ul>
+  </div>
+</template>
+<script type="text/ecmascript-6">
+export default {
+  name: 'HomeNews',
+  data() {
+    return {
+      list: ['新闻', '新闻', '新闻', '新闻']
+    }
+  }
+}
+</script>
+<style scoped></style>
+```
+
+```vue
+<template>
+  <div class="page-contianer">
+    <ul>
+      <li v-for="(item, index) in list">{{ item + index + 1 }}</li>
+    </ul>
+  </div>
+</template>
+<script type="text/ecmascript-6">
+export default {
+  name: 'HomeMessage',
+  data() {
+    return {
+      list: ['消息', '消息', '消息', '消息']
+    }
+  }
+}
+</script>
+<style scoped></style>
+```
+
+> 配置嵌套路由
+
+```js
+  {
+    path: '/home',//home  前端路由地址
+    name: 'Home',
+    component: Home, //组件名
+    children: [
+      {
+        path: '',
+        redirect: '/home/news'//缺省时候重定向到/home/news
+      },
+      {
+        path: 'news',//子嵌套路由 无须加/
+        name: 'News',
+        component: () => import('@/components/HomeNews') //懒加载组件
+      },
+      {
+        path: 'message',
+        name: 'Message',
+        component: () => import('@/components/HomeMessage') //懒加载组件
+      }
+    ]
+  },
+```
+
+> 修改Home.vue组件加上`<router-link>`和`<router-view/>`
+
+```vue
+<template>
+  <div class="page-contianer">
+    <h2>这是首页</h2>
+    <p>我是首页的内容,123456.</p>
+    <router-link to="/home/news">新闻</router-link>|
+    <router-link to="/home/message">消息</router-link>
+    <router-view/>
+  </div>
+</template>
+```
+
+![](./images/17-13.png)
+
+### 17.5.4	vue-router的参数传递
+
+之前的动态路由说的`userId`也是参数传递的方式的一种，准备新建一个Profile.vue组件，并配置路由映射，添加指定的`<router-link>`。
+
+```vue
+<template>
+  <div class="page-contianer">
+    <h2>这是档案界面</h2>
+    <p>这里是档案页面的内容。</p>
+    <p>档案的名字是: {{ profileInfo.name }}</p>
+    <p>档案的年龄是: {{ profileInfo.age }}</p>
+    <p>档案的身高是: {{ profileInfo.height }}</p>
+  </div>
+</template>
+<script type="text/ecmascript-6">
+export default {
+  name: 'Profile',
+  computed: {
+    profileInfo() {
+      return this.$route.query.profileInfo
+    }
+  }
+}
+</script>
+<style scoped></style>
+```
+
+```js
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: () => import('@/components/Profile')
+  }
+```
+
+```vue
+<router-link :to="{ path: '/profile', query: { profileInfo } }">档案</router-link>
+```
+
+在app.vue中设置初始的对象`profileInfo`
+
+```js
+  data (){
+    return {
+      userId: 'zty',
+      profileInfo: {
+        name: "zty",
+        age: 24,
+        height: 177
+      }
+    }
+  }
+```
+
+传递参数主要有两种类型：params和query
+
+> params的类型也就是动态路由形式
+
+- 配置路由的格式：`/user/:userId`
+- 传递的方式：在path后面跟上对应的userId
+- 传递形成的路径：`/user/123`，`/user/xxx`
+- 通过`$route.params.userId`获取指定userId
+
+> query的类型
+
+- 配置路由的格式：`/profile`，也就是普通的配置
+- 传递的方式：对象中使用query的key作为传递的方式
+- 传递形成的路径：`/profile?name=zty&age=24&height=177`（这个传递的是三个键值对），`/profile?profileInfo=%5Bobject%20Object%5D`（这个query传递的是一个对象的键值对，key为profileInfo，value是一个对象）
+
+![](./images/17-14.png)
+
+使用代码编写传递数据，使用`button`代替`<router-link>`，并添加点击事件。
+
+```vue
+    <button @click="userClick">用户</button>
+    <button @click="profileClick">档案</button>
+```
+
+```js
+    userClick() {
+      this.$router.push('/user/' + this.userId)
+      console.log("userClick")
+    },
+    profileClick() {
+      let profileInfo = this.profileInfo
+      this.$router.push({
+        path: '/profile',
+        query: {
+          profileInfo
+        }
+      })
+      console.log("profileClick")
+    }
+```
+
