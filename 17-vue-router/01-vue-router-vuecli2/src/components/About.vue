@@ -7,7 +7,10 @@
 
 <script type="text/ecmascript-6">
 export default {
-  name: 'About'
+  name: 'About',
+  created() {
+    document.title = '关于'
+  }
 }
 </script>
 

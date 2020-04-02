@@ -3,6 +3,7 @@
     <h2>这是用户界面</h2>
     <p>这里是用户页面的内容。</p>
     <p>用户ID是: {{ userId }}</p>
+    <button @click="btnClick">按钮</button>
   </div>
 </template>
 
@@ -12,6 +13,15 @@ export default {
   computed:{
     userId() {
       return this.$route.params.userId
+    }
+  },
+  methods: {
+    btnClick() {
+      //所有组件都继承自vue的原型
+      console.log(this.$router)
+      console.log(this.$route)
+      //调用vue原型的test
+      this.test()
     }
   }
 }

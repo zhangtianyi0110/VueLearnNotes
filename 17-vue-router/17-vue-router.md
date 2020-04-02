@@ -686,3 +686,283 @@ export default {
     }
 ```
 
+### 17.5.6	router和route的由来
+
+vue全局对象`this.$router`与main.js导入的router对象是一个对象，也就是我们`router/index.js`导出的对象router。
+
+```js
+new Vue({
+  el: '#app',
+  router,//使用路由对象
+  render: h => h(App)
+})
+```
+
+```js
+//4.导出router实例
+export default router
+```
+
+`this.$route`对象是当前处于活跃的路由，有params和query属性可以用来传递参数。
+
+查看`vue-router`源码,在我们项目中的`router/index.js`中，vue 对于插件必须要使用`Vue.use(Router)`，来安装插件，也就是执行vue-router的`install.js`。
+
+在[vue-router的github](https://github.com/vuejs/vue-router/tree/dev/src)源码中查看src结构如下：
+
+![](./images/17-15.png)
+
+其中index.js是入口文件，入口js文件就是导入并执行了install.js文件。
+
+![](./images/17-16.png)
+
+> 发现
+
+install.js中有注册2个全局组件`RouterView`和`RouterLink`，所以我们能使用`<router-view>`和`<router-link>`组件。
+
+![](./images/17-17.png)
+
+> $router和$route是继承自vue的原型
+
+怎么理解原型？学过Java 的都知道有父类和子类，子类也可以有自己的子类，但是他们都有一个处于最顶层的类Object(所有类的父类)。在Vue中就有那一个`Vue`类似Object，在java中在Object中定义的方法，所有的类都可以使用可以重写，类似的`Vue.prototype`（Vue的原型）定义的属性方法，他的原型链上的对象都可以使用，而`$router`和`$route`都在Vue的原型链上。
+
+在main.js入口文件中在vue的原型上定义一个方法test，然后在User组件中尝试调用。
+
+```js
+import Vue from 'vue'
+import App from './App'
+import router from './router'
+
+//在vue的原型上添加test方法
+Vue.prototype.test = function () {
+  console.log("test")
+}
+Vue.config.productionTip = false
+
+/* eslint-disable no-new */
+new Vue({
+  el: '#app',
+  router,//使用路由对象
+  render: h => h(App)
+})
+
+```
+
+```vue
+<template>
+  <div class="page-contianer">
+    <h2>这是用户界面</h2>
+    <p>这里是用户页面的内容。</p>
+    <p>用户ID是: {{ userId }}</p>
+    <button @click="btnClick">按钮</button>
+  </div>
+</template>
+
+<script type="text/ecmascript-6">
+export default {
+  name: 'User',
+  computed:{
+    userId() {
+      return this.$route.params.userId
+    }
+  },
+  methods: {
+    btnClick() {
+      //所有组件都继承自vue的原型
+      console.log(this.$router)
+      console.log(this.$route)
+      //调用vue原型的test
+      this.test()
+    }
+  }
+}
+</script>
+
+<style scoped>
+</style>
+```
+
+启动项目点击User页面上的按钮，打开浏览器控制台查看日志发现test方法被执行了。
+
+![](./images/17-18.png)
+
+继续来读install.js，install.js中一开始就将`Vue`这个类当参数传入了install方法中，并把`Vue`赋值给`_Vue`。
+
+![](./images/17-19.png)
+
+继续读install.js发现以下代码
+
+```js
+  Object.defineProperty(Vue.prototype, '$router', {
+    get () { return this._routerRoot._router }
+  })
+//Object.defineProperty用来定义属性
+  Object.defineProperty(Vue.prototype, '$route', {
+    get () { return this._routerRoot._route }
+  })
+```
+
+`Object.defineProperty`用来定义属性，以上代码就是给`Vue.prototype`(Vue原型)添加`$router`和`$route`属性并给属性赋值，等价于
+
+```js
+Vue.prototype.$router = {
+    get () { return this._routerRoot._router }
+}
+Vue.prototype.$router = {
+  get () { return this._routerRoot._router }
+}
+```
+
+也就是在Vue的原型上添加`$router`和`$route`属性,再查看get()返回值`this._routerRoot._router`
+
+![](./images/17-20.png)
+
+这里的`this.$options.router`就是我们main.js入口文件传入的参数`router`，也就是router/index.js导出的`router`对象。
+
+```js
+new Vue({
+  el: '#app',
+  router,//使用路由对象
+  render: h => h(App)
+})
+```
+
+## 17.6	vue-router其他
+
+### 17.6.1	vue-router的导航守卫
+
+问题：我们经常需要在路由跳转后，例如从用户页面跳转到首页，页面内容虽然可以自己定义，但是只有一个html文件，也只有一个title标签，我们需要改变标题。
+
+可以使用js去修改title，可以使用vue的生命周期函数在组件被创建的时候修改title标签内容。
+
+```js
+created() {
+	//创建的时候修改title
+    document.title = '关于'
+}
+mounted() {
+    //数据被挂载到dom上的时候修改title
+}
+update() {
+    //页面刷新的时候修改
+}
+```
+
+当然不能每个组件去写生命周期函数，如果我们能监听路由的变化(了解路由从哪来往哪里跳转)，那我们就能在跳转中修改title标签，这就是导航守卫能做的事情。
+
+修改`router/index.js`
+
+```js
+/**
+ * 前置钩子：从from跳转到to
+ * from 来的路由
+ * to 要去的路由
+ */
+router.beforeEach((to, from, next) => {
+  document.title = to.matched[0].meta.title //给目标路由的页面的title赋值
+  next()//必须调用，不调用不会跳转
+})
+```
+
+> router.beforeEach()称为前置钩子(前置守卫)，顾名思义，跳转之前做一些处理。
+
+当然每个路由配置上也要加上meta属性，不然就取不到了，为什么要使用`matched[0]`，因为如果你是嵌套路由，有没有给子路由添加meta（元数据：描述数据的数据）属性，就会显示`undefined`，使用`matched[0]`表示取到匹配的第一个就会找到父路由的meta属性。
+
+```js
+  //配置路由和组件之间的对应关系
+  {
+    path: '/home',//home  前端路由地址
+    name: 'Home',
+    component: Home, //组件名
+    meta: {
+      title: '首页'
+    },
+    children: [
+      {
+        path: '',
+        redirect: '/home/news'//缺省时候重定向到/home/news
+      },
+      {
+        path: 'news',//子嵌套路由 无须加/
+        name: 'News',
+        component: () => import('@/components/HomeNews') //懒加载组件
+      },
+      {
+        path: 'message',
+        name: 'Message',
+        component: () => import('@/components/HomeMessage') //懒加载组件
+      }
+    ]
+  },
+```
+
+启动服务发现功能已经实现。
+
+![](./images/17-21.gif)
+
+### 17.6.2	导航守卫补充
+
+前面说了前置守卫router.beforeEach()，相对的应该也存在后置守卫(后置钩子)。
+
+```js
+/**
+ * 后置钩子
+ */
+router.afterEach((to, from) => {
+  console.log('后置钩子调用了----')
+})
+```
+
+顾名思义，也就是在跳转之后的回调函数。
+
+- 前置守卫和后置守卫都是**全局守卫**。
+- 还有[路由独享守卫](https://router.vuejs.org/zh/guide/advanced/navigation-guards.html#%E8%B7%AF%E7%94%B1%E7%8B%AC%E4%BA%AB%E7%9A%84%E5%AE%88%E5%8D%AB)
+- [组件内的守卫](https://router.vuejs.org/zh/guide/advanced/navigation-guards.html#%E7%BB%84%E4%BB%B6%E5%86%85%E7%9A%84%E5%AE%88%E5%8D%AB)
+
+> 路由独享守卫，路由私有的
+
+```js
+  {
+    path: '/about',//about 前端路由地址
+    name: 'About',
+    component: () => import('@/components/About'), 
+    beforeEnter: (to, from, next) => {
+      console.log('来自' + from.path + ',要去' + to.path)
+      next()
+    },
+    meta: {
+      title: '关于'
+    }
+  },
+```
+
+`beforeEnter`的参数与全局守卫一样，修改`about`路由的参数，添加路由独享守卫，此时只有跳转到`about`路由，才会打印日志。
+
+![](./images/17-22.png)
+
+> 组件内的守卫，直接在组件中定义的属性
+
+- `beforeRouteEnter`
+- `beforeRouteUpdate` (2.2 新增)
+- `beforeRouteLeave`
+
+```js
+const Foo = {
+  template: `...`,
+  beforeRouteEnter (to, from, next) {
+    // 在渲染该组件的对应路由被 confirm 前调用
+    // 不！能！获取组件实例 `this`
+    // 因为当守卫执行前，组件实例还没被创建
+  },
+  beforeRouteUpdate (to, from, next) {
+    // 在当前路由改变，但是该组件被复用时调用
+    // 举例来说，对于一个带有动态参数的路径 /foo/:id，在 /foo/1 和 /foo/2 之间跳转的时候，
+    // 由于会渲染同样的 Foo 组件，因此组件实例会被复用。而这个钩子就会在这个情况下被调用。
+    // 可以访问组件实例 `this`
+  },
+  beforeRouteLeave (to, from, next) {
+    // 导航离开该组件的对应路由时调用
+    // 可以访问组件实例 `this`
+  }
+}
+```
+
