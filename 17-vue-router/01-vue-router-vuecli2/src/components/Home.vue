@@ -10,7 +10,33 @@
 
 <script type="text/ecmascript-6">
 export default {
-  name: 'Home'
+  name: 'Home',
+  data() {
+    return {
+      path: '/home/news'
+    }
+  },
+  created() {
+    console.log('Home组件被创建了')
+    this.$router.push('/home/news')
+  },
+  destoryed() {
+    console.log('Home组件被销毁了')
+  },
+  activated(){
+    console.log('调用actived')
+    this.$router.push(this.path)
+  },
+  // deactivated(){
+  //   console.log('调用actived')
+  //   console.log(this.$route.path)
+  //   this.path = this.$route.path
+  // },
+  beforeRouteLeave(to, from, next) {
+    console.log(this.$route.path)
+    this.path = this.$route.path
+    next()
+  }
 }
 </script>
 

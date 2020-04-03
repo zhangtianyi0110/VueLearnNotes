@@ -1,7 +1,7 @@
 <template>
   <div class="page-contianer">
     <ul>
-      <li v-for="(item, index) in list">{{ item + index + 1 }}</li>
+      <li v-for="(item, index) in list" :key="index">{{ item + index + 1 }}</li>
     </ul>
   </div>
 </template>

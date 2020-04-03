@@ -23,10 +23,10 @@ const routes = [
       title: '首页'
     },
     children: [
-      {
-        path: '',
-        redirect: '/home/news'//缺省时候重定向到/home/news
-      },
+      // {
+      //   path: '',
+      //   redirect: '/home/news'//缺省时候重定向到/home/news
+      // },
       {
         path: 'news',//子嵌套路由 无须加/
         name: 'News',

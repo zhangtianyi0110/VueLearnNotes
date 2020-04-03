@@ -511,7 +511,7 @@ component: () => import('@/components/User')
 <template>
   <div class="page-contianer">
     <ul>
-      <li v-for="(item, index) in list">{{ item + index + 1 }}</li>
+      <li v-for="(item, index) in list" :key="index">{{ item + index + 1 }}</li>
     </ul>
   </div>
 </template>
@@ -532,7 +532,7 @@ export default {
 <template>
   <div class="page-contianer">
     <ul>
-      <li v-for="(item, index) in list">{{ item + index + 1 }}</li>
+      <li v-for="(item, index) in list" :key="index">{{ item + index + 1 }}</li>
     </ul>
   </div>
 </template>
@@ -1016,3 +1016,150 @@ beforeRouteLeave (to, from , next) {
 11. 触发 DOM 更新。
 12. 用创建好的实例调用 `beforeRouteEnter` 守卫中传给 `next` 的回调函数。
 
+
+
+## 17.7	keep-alive
+
+先给Home组件加上`created()`和`destoryed()`2个生命周期函数。
+
+```vue
+<script type="text/ecmascript-6">
+export default {
+  name: 'Home',
+  created() {
+    console.log('Home组件被创建了')
+  },
+  destoryed() {
+    console.log('Home组件被销毁了')
+  }
+}
+</script>
+```
+
+启动项目，某些时候可能有这样的需求，如图所示：
+
+![](./images/17-23.gif)
+
+**分析**
+
+在首页和关于组件之间路由跳转的时候，Home组件一直重复创建和销毁的过程，每次创建都是新的Home组件，但是我有这样的需求。当我点击首页消息页面，随后跳转到关于页面，又跳转到首页，此时我希望显示的是首页的消息页面而不是默认的新闻页面，此时就需要`keep-alive`来使组件保持状态，缓存起来，离开路由后，Home组件生命周期的`destroyed()`不会被调用，Home组件不会被销毁。
+
+- `keep-alive`是Vue内置的一个组件，可以使被包含的组件保留状态，或者避免重新渲染。
+- `router-view`也是一个组件，如果用`<keep-alive><router-vie/></keep-alive>`，将其包起来，所有路径匹配到的视图组件都会被缓存。
+
+**修改`app.vue`代码**
+
+```html
+    <keep-alive>
+      <router-view/>
+    </keep-alive>
+```
+
+再次启动项目，发现还是新闻页面？难道是`keep-alive`无效？
+
+![](./images/17-24.gif)
+
+仔细看控制台发现，在跳转关于页面的时候Home组件并没有被销毁，说明`keep-alive`生效了。仔细查看路由配置发现，`/home`被默认重定向到了`/home/news`。所以在访问`/home`的时候每次出来的都是新闻。
+
+**思路**
+
+- 将默认的重定向去掉，但是第一次进入首页，那新闻页面内容又不会显示了。
+
+  ```js
+        // {
+        //   path: '',
+        //   redirect: '/home/news'//缺省时候重定向到/home/news
+        // },
+  ```
+
+  
+
+- 为了第一次能使新闻页面内容显示，可以使用`created()`，将路由用代码的方式手动重定向，也就是push。
+
+  ```js
+    created() {
+      console.log('Home组件被创建了')
+      this.$router.push('/home/news')
+    },
+  ```
+
+  
+
+- 由于`keep-alive`组件只创建一次，第一次进入Home组件的时候，新闻页面显示正常，当第二次跳转首页的时候，因为不会再调用`created()`，所以新闻页面又不会显示了。
+
+- 为了解决问题，在Home组件中引入`activated()`和`deactivated()`两个函数，这2个函数与`keep-alive`有关，不使用`keep-alive`的这两个函数无效。
+
+  - `activated()`当组件属于进入活跃状态的时候调用
+  - `deactivated()`当组件属于退出活跃状态的时候调用(此时路由已经跳转，所以不能在此方法中修改路由，因为修改的是to路由)
+
+- 为了使第二次进入首页新闻页面可以生效，使用`activated()`在Home组件使活跃状态时候就重定向
+
+  ```js
+      data() {
+      return {
+        path: '/home/news'
+      }
+    },
+    activated(){
+      console.log('调用actived')
+      this.$router.push(this.path)//在活跃的时候将保存的路由给当前路由
+    },
+    deactivated(){
+      console.log('调用actived')
+      console.log(this.$route.path)
+      this.path = this.$route.path//变成不活跃状态，将最后的路由保存起来
+    }
+  ```
+
+- 发现还是不行，由于`deactivated()`调用的时候，此时路由已经跳转，所以不能在此方法中修改路由，因为修改的是to路由。
+
+- 使用路由守卫(组件内守卫)，`beforeRouteLeave (to, from , next)`在离开路由的时候将当前的路由赋值给path并保存起来。
+
+  ```js
+    activated(){
+      console.log('调用actived')
+      this.$router.push(this.path)
+    },
+    // deactivated(){
+    //   console.log('调用actived')
+    //   console.log(this.$route.path)
+    //   this.path = this.$route.path
+    // },
+    beforeRouterLeave(to, from, next) {
+      console.log(this.$route.path)
+      this.path = this.$route.path
+      next()
+    }
+  ```
+
+  此时问题完全解决了。
+
+  ![](./images/17-25.gif)
+
+
+
+**keep-alive的属性**
+
+```vue
+    <keep-alive>
+      <router-view/>
+    </keep-alive>
+```
+
+我们将`<router-view/>`包起来，那所有的组件都会缓存，都只会创建一次，如果我们需要某一个组件每次都创建销毁，就需要使用`exclude`属性。
+
+```vue
+<keep-alive exclude='Profile,User'>
+   <router-view/>
+</keep-alive>
+```
+
+此时`Profile`和`User`组件（这里组件需要有name属性，分别为`Profile`和`User`）就被排除在外，每次都会创建和销毁。相对应的也有`include`属性，顾名思义就是包含，只有选中的才有`keep-alive`。
+
+```vue
+<keep-alive include='Profile,User'>
+   <router-view/>
+</keep-alive>
+```
+
+> `include`和`exclude`都是使用字符串和正则表达式，使用字符串的时候，注意“,”之后之前都别打空格。
