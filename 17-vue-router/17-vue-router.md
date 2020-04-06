@@ -1163,3 +1163,39 @@ export default {
 ```
 
 > `include`和`exclude`都是使用字符串和正则表达式，使用字符串的时候，注意“,”之后之前都别打空格。
+
+## 17.8	综合练习-实现Tab-Bar
+
+![](./images/17-26.gif)
+
+### 17.8.1	实现Tab-Bar思路
+
+1. 下方单独的`Tab-Bar`组件如何封装？
+   - 自定义`Tab-Bar`组件，在APP中使用
+   - 让`Tab-Bar`位置在底部，并设置你需要的样式
+2. `Tab-Bar`中显示的内容由外部决定
+   - 定义插槽
+   - flex布局平分`Tab-Bar`
+3. 自定义`Tab-Bar-Item`，可以传入图片和文字
+   - 定义`Tab-Bar-Item`，并定义两个插槽：图片和文字
+   - 给插槽外层包装`div`，设置样式
+   - 填充插槽，实现底部`Tab-Bar`的效果
+4. 传入高亮图片
+   - 定义另一个插槽，插入`active-icon`的数据
+   - 定义一个变量`isActicve`，通过`v-show`来决定是否显示对应的icon
+5. `Tab-Bar-Item`绑定路由数据
+   - 安装路由：`npm install vue-router --save`
+   - 在`router/index.js`配置路由信息，并创建对应的组件
+   - `main.js`中注册`router`
+   - `App.vue`中使用`router-link`和`router-view`
+6. 点击item跳转到对应的路由，并且动态决定`isActive`
+   - 监听`item`的点击，通过`this.$router.replace()`替换路由路径
+   - 通过`this.$route.path.indexOf(this.link)!==-1`来判断是否使`active`
+7. 动态计算active样式
+   - 封装新的计算属性：`this.isActive?{'color': 'red'}:{}`
+
+
+
+### 17.8.2	代码实现
+
+使用`vue init webpack 02-vue-router-tabbar-v1`新建一个项目工程(使用`vuecli2`)。
