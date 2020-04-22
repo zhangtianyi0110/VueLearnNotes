@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>02-Promise的链式调用</title>
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+  <script>
+    //  网络请求响应结果为 hello ,打印hello
+    //  处理： hello world ,打印hello world
+    //  处理： hello world，vuejs ,打印hello world，vuejs
+    new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('hello')
+      }, 1000)
+    }).then(res => {
+      console.log(res)//打印hello
+      return new Promise(resolve => {
+          resolve(res + ' world')
+      }).then(res => {
+        console.log(res)//打印hello world
+        return new Promise(resolve => {
+          resolve(res + ',vuejs')
+        }).then(res => {
+          console.log(res)//打印hello world,vuejs
+        })
+      })
+    })
+
+    //  简写使用Promise.resolve
+    new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('hello')
+      }, 1000)
+    }).then(res => {
+      console.log(res)//打印hello
+      return Promise.resolve(res + ' world')
+    }).then(res => {
+        console.log(res)//打印hello world
+        return Promise.resolve(res + ',vuejs')
+    }).then(res => {
+      console.log(res)//打印hello world,vuejs
+    })
+
+    //  省略掉Promise.resolve
+    new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('hello')
+      }, 1000)
+    }).then(res => {
+      console.log(res)//打印hello
+      return res + ' world'
+    }).then(res => {
+        console.log(res)//打印hello world
+        return res + ',vuejs'
+    }).then(res => {
+      console.log(res)//打印hello world,vuejs
+    })
+
+    //  中途发生错误
+    new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('hello')
+      }, 1000)
+    }).then(res => {
+      console.log(res)//打印hello
+      return res + ' world'
+    }).then(res => {
+        console.log(res)
+        // return Promise.reject('error message')//发生异常
+        throw 'error message' //抛出异常
+    }).then(res => {
+      console.log(res)//打印hello world,vuejs
+    }).catch(error => {
+      console.log(error)
+    })
+  </script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>01-Promise的基本使用</title>
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+  <script>
+    //1.使用setTimeout模拟嵌套的三次网络请求
+    setTimeout(() => {//第一次请求
+      console.log("hello world")//第一次处理代码
+      setTimeout(() => {//第二次请求
+        console.log("hello vuejs")//第二次处理代码
+        setTimeout(() => {//第三次请求
+          console.log("hello java")//第三次处理代码
+        }, 1000)
+      }, 1000)
+    }, 1000)
+
+    //参数 -> 函数
+    // resolve和reject本身也是函数
+    //then()的参数也是一个函数
+    new Promise((resolve, reject) => {
+      setTimeout(() => {//第一次网络请求
+        resolve()
+      }, 1000)
+    }).then(() => {
+      console.log("hello world")//第一次处理代码
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {//第二次网络请求
+          resolve()
+        }, 1000).then(() => {
+          console.log("hello vuejs")//第二次处理代码
+          return new Promise((resolve, reject) => {
+            setTimeout(() => {//第三次网络请求
+              resolve()
+            }, 1000)
+          }).then(() => {
+            console.log("hello java")//第三次处理代码
+          })
+        })
+      })
+    })
+
+    // 什么情况下要使用Promise？
+    // 有异步操作是，使用promise对异步操作进行封装
+    // new -> 构造函数(1.保存一些状态信息 2.执行传入的函数)
+    // 在执行回调函数时候(resolve，reject)本身又是函数
+    new Promise((resolve, reject) => {
+      setTimeout(() => {
+        // 成功的时候调用resolve()
+        // resolve('hello world')
+
+        // 失败的时候调用reject()
+        reject('error message')
+      }, 1000).then(data => {
+        console.log(data)
+      }).catch(error => {
+        console.log(error)
+      })
+    })
+  </script>
+</body>
+</html>

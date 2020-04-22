@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>03-Promise的all使用</title>
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+  <script>
+    //     如下情况：
+    //    有两个网络请求A和B,只有AB都返回结果才进行下一步
+    //    ajax可能会这么写
+    // $.ajax({
+    //   ...//结果A
+    //   resultA = true
+    //   callback()
+    // })
+    // $.ajax({
+    //   ...//结果B
+    //   resultB = true
+    //   callback()
+    // })
+    // //回调函数
+    // function callback(){
+    //   if(resultA&&resultB){
+    //     ...
+    //   }
+    // }
+
+    //  promise使用
+    // Promise.all([
+    //   new Promise((resolve, resjct) => {
+    //     $.ajax({
+    //       url: 'url1',
+    //       success: function (data) {
+    //         resolve(data)
+    //       }
+    //     })
+    //   }),
+    //   new Promise((resolve, resjct) => {
+    //     $.ajax({
+    //       url: 'url2',
+    //       success: function (data) {
+    //         resolve(data)
+    //       }
+    //     })
+    //   }).then(results => {
+    //     console.log(results)
+    //   })
+    // ])
+
+    // settimeout模拟
+    Promise.all([
+      new Promise((resolve, reject) => {
+        setTimeout(() => {//  请求A
+          resolve('结果A')
+        }, 1000)
+      }),
+      new Promise((resolve, reject) => {
+        setTimeout(() => {//  请求B
+          resolve('结果B')
+        }, 1000)
+      })
+    ]).then(results => {
+      console.log(results)
+    })
+
+  </script>
+</body>
+</html>
