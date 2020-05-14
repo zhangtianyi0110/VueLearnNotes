@@ -11,12 +11,12 @@
     <!-- 1.遍历过程没有使用key-->
     <!-- 格式为：key-value -->
     <ul>
-      <li v-for="(item,key) in user" >{{key+"-"+item}}</li>
+      <li v-for="(value,key) in user" >{{key+"-"+value}}</li>
     </ul>
     <!-- 2.遍历过程没有使用索引和key-->
     <!-- 格式为：key-value-index -->
     <ul>
-      <li v-for="(item,key,index) in user" >{{key+"-"+item+"-"+index}}</li>
+      <li v-for="(value,key,index) in user" >{{key+"-"+value+"-"+index}}</li>
     </ul>
 
   </div>
