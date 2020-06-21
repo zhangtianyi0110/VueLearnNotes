@@ -18,4 +18,6 @@ Vue学习笔记
 - [15-webpack](./15-webpack/15-webpack.md)
 - [16-vue-cli](./16-vue-cli/16-vue-cli.md)
 - [17-vue-router](./17-vue-router/17-vue-router.md)
+- [18-Promise](./18-Promise/18-Promise.md)
+- [19-vuex](./19-vuex/19-vuex.md)
 
